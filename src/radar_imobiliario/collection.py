@@ -97,6 +97,7 @@ def collect(
                 try:
                     collector.start()
                     source.enabled = True
+                    source.last_error = None
                     urls = collector.discover_urls()
                     run.discovered = len(urls)
                     if limit is not None:
