@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "radar-imobiliario-curitiba"
+version = "0.1.0"
+description = "Coleta e análise local de preços anunciados de casas em Curitiba"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "beautifulsoup4>=4.13",
+    "httpx>=0.28",
+    "joblib>=1.5",
+    "pandas>=2.2",
+    "playwright>=1.55",
+    "scikit-learn>=1.6",
+    "sqlalchemy>=2.0",
+    "streamlit>=1.45",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3"]
+
+[project.scripts]
+radar = "radar_imobiliario.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/radar_imobiliario"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
