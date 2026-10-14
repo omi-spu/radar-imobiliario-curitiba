@@ -32,7 +32,7 @@ def main() -> None:
     collect_parser.add_argument("--source", action="append", choices=["apolar", "innova", "habitec"])
     collect_parser.add_argument("--limit", type=int, help="Amostra por fonte; não retira anúncios ausentes")
     collect_parser.add_argument("--retry-blocked", action="store_true")
-    commands.add_parser("daily", help="Coleta completa e treino semanal, para o agendador")
+    commands.add_parser("daily", help="Executar uma vez a coleta pendente e atualizar o modelo")
     commands.add_parser("train", help="Treinar e validar o modelo")
     commands.add_parser("status", help="Ver situação das fontes")
     commands.add_parser("dashboard", help="Abrir painel local")

@@ -12,25 +12,27 @@ No PowerShell, dentro desta pasta:
 ```powershell
 $env:UV_CACHE_DIR = Join-Path (Get-Location) '.uv-cache'
 uv sync
-uv run radar collect --limit 3
-uv run radar status
-uv run radar dashboard
+uv run radar collect --limit 3 # Coletar anúncios
+uv run radar status # Atualizar estimativa
+uv run radar dashboard # Abrir painel
 ```
 
 O `--limit 3` coleta uma amostra de cada imobiliária para testar o sistema. A coleta completa é `uv run radar collect`. O painel abre em `http://localhost:8501`. O banco fica em `data/radar.sqlite3`, fora do Git.
 
 Se uma fonte ficar desativada por regras de acesso ou HTTP 403, consulte `uv run radar status` antes de tentar novamente com `uv run radar collect --source NOME --retry-blocked`.
 
-## Coleta automática
+## Execução manual
 
-Execute `./scripts/register-schedule.ps1` no PowerShell para registrar a tarefa `RadarImobiliarioCuritiba` no Agendador de Tarefas. Ela roda às 07:00 enquanto a sessão do usuário está disponível e também no próximo login, caso o computador esteja desligado no horário. O comando `radar daily` pula fontes cuja varredura integral terminou nas últimas 20 horas com até 5% de páginas com falha e treina o modelo semanalmente, ou diariamente enquanto não houver amostra ou precisão suficiente.
+O sistema só executa quando você inicia um comando. Não há tarefa agendada, inicialização com o Windows ou coleta automática em segundo plano. A coleta termina ao concluir as fontes. O painel permanece aberto enquanto seu comando estiver rodando; use `Ctrl+C` no terminal para encerrá-lo.
 
-Para executar manualmente:
+Para coletar e depois treinar o modelo:
 
 ```powershell
-uv run radar daily
+uv run radar collect
 uv run radar train
 ```
+
+Opcionalmente, `uv run radar daily` executa uma única rodada de coleta pendente e atualização do modelo, encerrando em seguida. Apesar do nome, ele não cria um agendamento: pula fontes com varredura integral nas últimas 20 horas e atualiza o modelo se tiver mais de sete dias ou estiver indisponível.
 
 Uma execução com `--limit` ou com falhas não marca anúncios como retirados. Após duas coletas **completas** consecutivas sem encontrar um anúncio, ele passa a inativo. Apenas mudanças de preço criam eventos no histórico.
 
